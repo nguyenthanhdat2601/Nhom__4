@@ -1,44 +1,4 @@
 import numpy as np
-
-""" def Input1():
-    #so phuong trinh
-    sopt = IntVar()
-    return sopt.get()
-def Input2():
-    #so an 
-    soan = IntVar()
-    return soan.get()
-def test_input(sopt, soan):
-    if (sopt != soan or sopt < 0 or soan < 0):
-            print("Error! Nhap lai!")
-            sopt = Input1()
-            soan = Input2()
-            test_input(sopt, soan)
-    else: 
-        return sopt, soan
-def Input3(sopt, soan):
-        A = np.zeros((sopt, soan), dtype = float)
-        B = np.zeros((sopt, 1), dtype = float)
-        for pt in range(0, sopt):
-            print(f"Nhap he so cua phuong trinh thu {pt + 1}: ")
-            for an in range(0, sopt):
-                A[pt, an] = float(input(f"----he so thu {an + 1}: "))
-            B[pt, 0] = float(input("----he so cuoi: "))
-        print (A)
-        print (B)
-        return A, B
-def calculate(A, B):
-    try:
-        if (np.linalg.det(A) != 0):
-            X = np.dot(np.linalg.inv(A), B)
-            return X
-        else: 
-            calculate(A, B)
-    except:
-        print("Error!")
-        Input3(A, B)
-        calculate() """
-
 from tkinter import *
 from tkinter import messagebox
 
@@ -53,6 +13,8 @@ sopt = IntVar()
 Label(win, text = 'Nhap so phuong trinh', font = ('Arial', 9), bg = 'yellow', fg = 'black', height=1, relief='solid', borderwidth = 2, width = 30).place(x = 250, y = 60)
 Entry(win, textvariable = sopt, font = ('Arial', 13), bg = 'yellow', fg = 'black', relief='solid', borderwidth = 2, width = 5).place(x = 485, y = 60)
 
+a = 'abcdefghijklmnopqrstuvwxyz'
+a1 = list(a)
 A = []
 entries_A = []
 B = []
@@ -64,32 +26,38 @@ class Cal:
         self.B = B
         self.entries_B = entries_B
     def create(self):
-        a = 'abcdefghijklmnopqrstuvwxyz'
-        a1 = list(a)
-        for i in range(sopt.get()):
-            self.A.append([])
-            self.entries_A.append([])
-            self.B.append([])
-            self.entries_B.append([])
-            for j in range(sopt.get()):
-                self.A[i].append(DoubleVar())
-                if (i > 0):
-                    Label(win,background = 'purple', text = ' + '+a1[j]+f'{i}', width = 3).place(x = 80 + 80*i, y = 200 + 30*j)#grid(row = i, column = j+2)
-                else:
-                    Label(win,background = 'purple', text = a1[j]+f'{i}', width = 3).place(x = 80 + 80*i, y = 200 + 30*j)#grid(row = i, column = j+2)
-                self.entries_A[i].append(Entry(win, textvariable = self.A[i][j], width=3))
-                self.entries_A[i][j].place(x =110 + 83*j, y = 200 + 30*i)#grid(row=i, column=j+4)
-            self.B[i].append(DoubleVar())
-            Label(win,background = 'purple', text = f' = ', width = 3).place( x = 140 + 83*2, y = 200 + 30*i)#grid(row = i, column = 4)
-            self.entries_B[i].append(Entry(win, textvariable = self.B[i][0], width=3))
-            self.entries_B[i][0].place( x = 83*4, y = 200 + 30*i)#grid(row= i, column= 5)
+        try:
+            if (sopt.get() <= 0):
+                messagebox.showwarning("CHu y","So phuong trinh phai >0")
+            for i in range(sopt.get()):
+                self.A.append([])
+                self.entries_A.append([])
+                self.B.append([])
+                self.entries_B.append([])
+                for j in range(sopt.get()):
+                    self.A[i].append(StringVar())
+                    if (i > 0):
+                        Label(win,background = 'purple', text = ' + '+a1[j]+f'{i}', width = 3).place(x = 80 + 80*i, y = 200 + 30*j)#grid(row = i, column = j+2)
+                    else:
+                        Label(win,background = 'purple', text = a1[j]+f'{i}', width = 3).place(x = 80 + 80*i, y = 200 + 30*j)#grid(row = i, column = j+2)
+                    self.entries_A[i].append(Entry(win, textvariable = self.A[i][j], width=3))
+                    self.entries_A[i][j].place(x =110 + 83*j, y = 200 + 30*i)#grid(row=i, column=j+4)
+                self.B[i].append(StringVar())
+                Label(win,background = 'purple', text = f' = ', width = 3).place( x = 140 + 83*2, y = 200 + 30*i)#grid(row = i, column = 4)
+                self.entries_B[i].append(Entry(win, textvariable = self.B[i][0], width=3))
+                self.entries_B[i][0].place( x = 83*4, y = 200 + 30*i)#grid(row= i, column= 5)
+        except:
+            messagebox.showwarning("CHu y","Kieu du lieu khong dung!")
 
     def get_mat_A(self):
         matrix_A = []
         for i3 in range(sopt.get()):
             matrix_A.append([])
             for j3 in range(sopt.get()):
-                matrix_A[i3].append(self.A[i3][j3].get())
+                if (self.A[i3][j3].get() != None):
+                    matrix_A[i3].append(float(self.A[i3][j3].get()))
+                else: 
+                    messagebox.showwarning("Thieu du lieu", f'Nhap thieu he so cua {a1[j3]}{i3}')
 
         return np.array(matrix_A)
 
@@ -98,7 +66,10 @@ class Cal:
         for i3 in range(sopt.get()):
             matrix_B.append([])
             for j3 in range(1):
-                matrix_B[i3].append(self.B[i3][j3].get())
+                if (self.B[i3][j3].get() != None):
+                    matrix_B[i3].append(float(self.B[i3][j3].get()))
+                else:
+                    messagebox.showwarning("Thieu du lieu", f'Nhap thieu he so cua phuong trinh thu {i3}')
         return np.array(matrix_B)
 
     def calculate(self):
