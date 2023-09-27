@@ -101,6 +101,49 @@ def ipL1_l2(in_data):
         return "=> so sinh vien dat L2 lon hon L1"
     else:
         return "=> so sinh vien dat L2 bang L1"
+# muc 9: vẽ đồ thị phổ điểm của từng lớp
+def dothipho_diem():
+    lop = df.index.to_list() #tạo danh sách các lớp
+    diem_loai = df.loc[:, "Loai A": "Loai F"] # Lấy điểm từ loại A->F
+    for i in range(len(lop)): # vẽ đồ thị phổ điểm theo lớp
+        plt.figure(figsize=(8, 4))
+        plt.bar(diem_loai.columns, diem_loai.iloc[i], color='skyblue')
+        plt.xlabel('Loai diem')
+        plt.ylabel('So luong')
+        plt.title(f'Diem cua lop {lop[i]}')
+        plt.show()
+# muc 10: số phần trăm từng loại điểm và hiển thị bằng biểu đồ hình tròn:
+def phantram_loai_diem():
+    diem_loai = df.loc[:, 'Loai A':'Loai F']
+    tong_so_sv = diem_loai.sum() # tính tổng số sinh viên
+    labels = tong_so_sv.index  # Tên loại điểm (A, B+, B, C+, C, D+, D, F)
+    sizes = tong_so_sv.values  # Số lượng sinh viên đạt từng loại điểm
+    colors = ['red', 'yellowgreen', 'lightblue', 'darkgreen', 'blue', 'pink', 'lightsalmon', 'black']
+    explode = (0.1, 0, 0, 0, 0, 0, 0, 0)  # Để phân cách một phần nhỏ (loại A) ra xa
+
+    plt.figure(figsize=(8, 8))
+    plt.pie(sizes, explode=explode, labels=labels, colors=colors, autopct='%1.1f%%', shadow=True, startangle=140)
+    plt.title('Phan phoi diem theo loai')
+    plt.axis('equal')  # Đảm bảo biểu đồ hình tròn hoàn chỉnh
+
+    plt.show()
+# muc 11: Tính số phần trăm sinh viên đi thi đầy đủ
+def phantram_sv_tham_ra_day_du(in_data):
+    so_sv_du = sv_ck(in_data)
+    so_sv_khong_du = sum_sv(in_data) - so_sv_du
+
+    # Tạo biểu đồ hình tròn
+    labels = ['Du', 'Khong du']
+    sizes = [so_sv_du, so_sv_khong_du]
+    colors = ['lightgreen', 'lightcoral']
+    explode = (0.1, 0)  # Để phân cách một phần nhỏ (loại Đủ) ra xa     
+    plt.figure(figsize=(8, 8))
+    plt.pie(sizes, explode=explode, labels=labels, colors=colors, autopct='%1.1f%%', shadow=True, startangle=140)
+    plt.title('Phan phoi so luong sinh vien di thi')
+    plt.axis('equal')  # Đảm bảo biểu đồ hình tròn hoàn chỉnh
+
+    plt.show()
+
 
 """ print('Tong so sinh vien di thi :')
 tongsv= in_data[:,1]
@@ -117,4 +160,7 @@ plt.xlabel('Lơp')
 plt.ylabel(' So sv dat diem ')
 plt.legend(loc='upper right')
 plt.show() """
-      
+
+dothipho_diem()    
+phantram_loai_diem()
+phantram_sv_tham_ra_day_du(in_data)     
