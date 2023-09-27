@@ -82,6 +82,16 @@ def Type_max_min(in_data):
     loai_diem2.append(loai_diem1[ind2])
     result = dict(zip(option, loai_diem2))
     return result
+    
+#muc 6: Tìm TBC số sv đạt điểm A,B.. của cả 9 lớp
+def tbc_loai_diem(in_data):
+    Text = "Loại A,Loại B+,Loại B,Loại C+,Loại C,Loại D+,Loại D,Loại F"
+    loai_diem1 = Text.split(",")
+    tbc = []
+    for i in range(3, 11):
+        tbc.append(round(np.mean((in_data[:, i])), 0))
+    mydict = dict(zip(loai_diem1, tbc))
+    return mydict
 
 #mục 7: tổng số sinh viên đạt bài cuối kỳ
 def sv_ck(in_data):
@@ -102,9 +112,9 @@ def ipL1_l2(in_data):
     else:
         return "=> so sinh vien dat L2 bang L1"
 # muc 9: vẽ đồ thị phổ điểm của từng lớp
-def dothipho_diem():
+def dothipho_diem_tung_lop():
     lop = df.index.to_list() #tạo danh sách các lớp
-    diem_loai = df.loc[:, "Loai A": "Loai F"] # Lấy điểm từ loại A->F
+    diem_loai = df.loc[:, "Loại A": "Loại F"] # Lấy điểm từ loại A->F
     for i in range(len(lop)): # vẽ đồ thị phổ điểm theo lớp
         plt.figure(figsize=(8, 4))
         plt.bar(diem_loai.columns, diem_loai.iloc[i], color='skyblue')
@@ -112,6 +122,37 @@ def dothipho_diem():
         plt.ylabel('So luong')
         plt.title(f'Diem cua lop {lop[i]}')
         plt.show()
+def dothipho_diem_tong_quan(in_):
+    Ma_lop = list(in_data[:, 0])
+    Pho_diem = []
+    Pd_lop = {}
+    Text = "Loại A,Loại B+,Loại B,Loại C+,Loại C,Loại D+,Loại D,Loại F"
+    loai_diem1 = Text.split(",")
+    for i in range(0, 9):
+        info = list(in_data[i, :])
+        type_diem = []
+        for j in range(3, 11):
+            type_diem.append(info[j])
+        my_dict1 = dict(zip(loai_diem1, type_diem))
+        Pho_diem.append(my_dict1)
+    Pd_lop = dict(zip(Ma_lop, Pho_diem))
+    
+    data = Pd_lop
+    tenlop = list(data.keys())
+    Pho_diem = list(data[tenlop[0]].keys())
+    x = np.arange(len(tenlop))
+    bottom_values = [0] * len(tenlop)
+    for loai_diem in Pho_diem:
+        values = [data[lop][loai_diem] for lop in tenlop]
+        plt.bar(x, values, label=loai_diem, bottom=bottom_values)
+        bottom_values = [bottom + value for bottom, value in zip(bottom_values, values)]
+    plt.xlabel('Lớp')
+    plt.ylabel('số lượng điểm')
+    plt.title('Phổ điểm của từng lớp')
+    plt.xticks(x, tenlop)
+    plt.yticks(np.arange(0, 65, 1))
+    plt.legend()
+    plt.show()
 # muc 10: số phần trăm từng loại điểm và hiển thị bằng biểu đồ hình tròn:
 def phantram_loai_diem():
     diem_loai = df.loc[:, 'Loai A':'Loai F']
