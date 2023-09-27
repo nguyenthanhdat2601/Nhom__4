@@ -48,6 +48,28 @@ class Cal:
                 self.entries_B[i][0].place(x=200 + 83 * (int(sopt.get())+1), y=110 + 30 * i)
         except:
             messagebox.showwarning("CHu y","Kieu du lieu khong dung!")
+            for widget_list in [self.A, self.entries_A, self.B, self.entries_B]:
+
+                for row in widget_list:
+
+                    for widget in row:
+                        widget.set("")
+
+            for widget_list in [self.entries_A, self.entries_B]:
+
+                for row in widget_list:
+
+                    for widget in row:
+                        widget.destroy()
+
+            for i in range(len(A)):
+
+                for j in range(len(A)):
+                    Label(win, text="", width=3).place(x=280 + 83 * j, y=110 + 30 * i)
+
+                Label(win, text="", width=3).place(x=310 + 83 * (int(sopt.get()) - 1), y=110 + 30 * i)
+
+                Label(win, text="", width=3).place(x=200 + 83 * (int(sopt.get()) + 1), y=110 + 30 * i)
 
     def get_mat_A(self):
         matrix_A = []
