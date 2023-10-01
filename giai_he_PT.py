@@ -129,4 +129,5 @@ Button(win, text = 'Clear', command = clear, font = ('Times new roman', 15), fg 
 Button(win, text = 'Calculate', command = cal.calculate, font = ('Times new roman', 15), fg = 'black', bg = 'brown', width = 8, height = 2, relief='solid', borderwidth = 2).place(x = 580, y = 710)
 
 win.mainloop()
-
+ 
+//gfsdgfds
