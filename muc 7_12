@@ -1,0 +1,39 @@
+#mục 7: tổng số sinh viên đạt bài cuối kỳ
+
+def sv_ck(in_data):
+    sv_cuoi_ky = in_data[:, 15]
+    return np.sum(sv_cuoi_ky)
+
+#mục 12 :Tạo biểu đồ cột thể hiện số sinh viên đạt từng loại điểm theo từng lớp
+
+def create_bar_chart(in_data):
+    plt.figure(figsize=(6, 4))
+    lop = data.keys()
+    values = data.values()
+    plt.bar(lop, values)
+    plt.xlabel('Lớp')
+    plt.ylabel('Số lượng sinh viên')
+    plt.title('Số lượng sinh viên đạt từng loại điểm theo từng lớp')
+
+   
+    plt.savefig('bar_chart.png')
+
+
+doc = Document()
+
+
+title = doc.add_heading('BÁO CÁO KẾT QUẢ KẾT THÚC HỌC PHẦN', 0)
+title.alignment = WD_ALIGN_PARAGRAPH.CENTER
+
+
+
+
+doc.add_heading('Kết quả học tập', level=1)
+
+
+create_bar_chart(tong_sv_type(in_data))
+
+
+doc.add_picture('bar_chart.png', width=docx.shared.Inches(6), height=docx.shared.Inches(4))
+
+
